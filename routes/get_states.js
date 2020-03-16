@@ -3,6 +3,7 @@
  * @param unit - The UUID of the unit
  * @return The states of all devices conencted to this unit.
  */
+
 module.exports = function (req, res, { unit }, database) {
     database.query('DEVICES_ON_UNIT', unit).then(function ({ rows }) {
         if (!unit) throw 'Missing required "unit" parameter.';

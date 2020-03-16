@@ -3,6 +3,7 @@
  * @param device - The ID of the device.
  * @return The state of the device as a JSON object, with state_type and state_value.
  */
+
 module.exports = function (req, res, { device }, database) {
     database.query('GET_DEVICE_STATE', device).then(function ({ rows }) {
         if (!device) throw 'Missing required "device" parameter.';
