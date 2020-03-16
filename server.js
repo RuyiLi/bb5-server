@@ -31,10 +31,10 @@ module.exports = class Server {
         console.log(this.routes.get(method), route);
 
         if (!this.routes.get(method).has(route)) {
-            res.writeHead(404).end('asdf');
+            res.writeHead(404).end('Invalid route or illegal request.');
         } else {
             const body = await this.readRequestBody(req);
-            this.routes.get(method).get(route)(req, res, body, this.database);
+            this.routes.get(method).get(route)(req, res, JSON.parse(body), this.database);
         }
     } 
 }
