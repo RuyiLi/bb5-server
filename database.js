@@ -29,7 +29,8 @@ module.exports = class Database {
             try {
                 await this.query('SCHEMA');
             } catch (err) {
-                throw err;
+                // console.error(err);
+                console.error('Error trying to sync tables');
             }
             console.info('Successfully synced database.');
         }
