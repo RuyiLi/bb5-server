@@ -15,7 +15,7 @@ module.exports = class Database {
         const files = fs.readdirSync(this.queryDirectoryPath);
         for (const file of files) {
             if (!file.endsWith('.sql')) continue;
-            const data = fs.readFileSync(this.queryDirectoryPath + file);
+            const data = fs.readFileSync(this.queryDirectoryPath + file, 'utf-8');
             this.queries[file.slice(0, -4).toUpperCase()] = data;
         }
     }
