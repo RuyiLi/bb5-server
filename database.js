@@ -4,11 +4,14 @@ const fs = require('fs');
 module.exports = class Database {
     constructor (uri) {
         this.uri = uri;
-        this.pool = new Pool({
-            connectionString: process.env.DATABASE_URL,
-        });
         this.queryDirectoryPath = './sql/';
         this.queries = {};
+
+        const [ url, user, password, host, port, database ] = process.env.DATABASE_URL.match(/postgres:\/\/(.*):(.*)@(.*):(.*)\/(.*)/);
+        this.pool = new Pool({
+            user, password, host, port, database,
+            ssl: true,
+        });
     }
 
     loadQueries () {
@@ -23,7 +26,12 @@ module.exports = class Database {
     async init (forceUpdate) {
         this.loadQueries();
         if (forceUpdate) {
-            await this.query('SCHEMA');
+            try {
+                await this.query('SCHEMA');
+            } catch (err) {
+                throw err;
+            }
+            console.info('Successfully synced database.');
         }
     }
 

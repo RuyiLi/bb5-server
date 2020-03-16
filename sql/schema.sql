@@ -4,12 +4,13 @@ DROP TABLE IF EXISTS devices;
 
 CREATE TABLE users (
     user_id INT PRIMARY KEY,
-    username VARCHAR(25) NOT NULL,
+    username VARCHAR(25) NOT NULL
 );
 
 CREATE TABLE units (
     unit_id INT PRIMARY KEY,
-    user_id INT FOREIGN KEY REFERENCES users(id),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 CREATE TABLE devices (
@@ -21,5 +22,6 @@ CREATE TABLE devices (
         For analog, 0 or 1
         For digital, 0 to 100
     */
-    unit_id INT FOREIGN KEY REFERENCES units(id),
+    unit_id INT,
+    FOREIGN KEY (unit_id) REFERENCES units (unit_id)
 );
