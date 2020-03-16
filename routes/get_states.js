@@ -5,12 +5,22 @@
  */
 module.exports = function (req, res, { unit }, database) {
     database.query('DEVICES_ON_UNIT', unit).then(function ({ rows }) {
+        if (!unit) throw 'Missing required "unit" parameter.';
+        if (rows.length === 0) throw 'Invalid unit ID.';
+
         res.writeHead(200, {
             'Content-Type': 'application/json',
-        }).end(JSON.stringify({ units: rows }));
+        });
+        res.end(JSON.stringify({
+            code: 200,
+            units: rows 
+        }));
     }).catch(function (err) {
         console.error(err);
-        res.writeHead(400, 'Invalid unit ID')
-            .end();
+        res.writeHead(400, err);
+        res.end(JSON.stringify({
+            code: 400,
+            message: err,
+        }));
     });
 }

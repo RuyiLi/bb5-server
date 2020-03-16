@@ -5,12 +5,22 @@
  */
 module.exports = function (req, res, { device }, database) {
     database.query('GET_DEVICE_STATE', device).then(function ({ rows }) {
+        if (!device) throw 'Missing required "device" parameter.';
+        if (rows.length === 0) throw 'Invalid device ID.';
+
         res.writeHead(200, {
             'Content-Type': 'text',
-        }).end(JSON.stringify(rows[0]));
+        });
+        res.end(JSON.stringify({
+            code: 200,
+            device_state: rows[0],
+        }));
     }).catch(function (err) {
         console.error(err);
-        res.writeHead(400, 'Invalid device ID')
-            .end();
+        res.writeHead(400, err);
+        res.end(JSON.stringify({
+            code: 400,
+            message: err,
+        }));
     });
 }
