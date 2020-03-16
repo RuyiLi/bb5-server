@@ -24,6 +24,6 @@ const database = new Database();
 database.init(process.argv.includes('-f')).then(function () {
     const server = new Server(routes, database);
     const wss = new WebsocketServer(database);
-    server.init(8080);
+    server.init(process.env.PORT || 8080);
     wss.init(5000);
 });
