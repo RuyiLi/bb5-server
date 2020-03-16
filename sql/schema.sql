@@ -30,8 +30,8 @@ CREATE TABLE devices (
 
     state_value INT NOT NULL, 
     /* 
-        For analog, 0 or 1
-        For digital, 0 to 100
+        For analog, 0 to 100
+        For digital, 0 or 1
     */
 
     unit_id INT,

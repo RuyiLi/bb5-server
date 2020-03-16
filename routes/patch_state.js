@@ -18,7 +18,7 @@ module.exports = async function (req, res, { device, type, value }, database) {
             res.end(JSON.stringify({
                 code: 200,
             }));
-        });
+        }).catch(err => { throw err });
     } catch (err) {
         console.error(err);
         res.writeHead(400, err);

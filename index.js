@@ -8,7 +8,7 @@ require('dotenv').config();
 
 const routes = new Map();
 const routesDirectory = './routes/';
-const SUPPORTED_METHODS = [ 'GET', 'PATCH' ];
+const SUPPORTED_METHODS = [ 'GET', 'PATCH', 'POST' ];
 
 for (const method of SUPPORTED_METHODS) {
     routes.set(method, new Map());
