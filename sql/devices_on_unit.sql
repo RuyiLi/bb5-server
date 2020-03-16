@@ -1,3 +1,3 @@
 SELECT *
 FROM devices
-WHERE unit_id = ?;
+WHERE unit_id = $1;

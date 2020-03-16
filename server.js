@@ -9,7 +9,7 @@ module.exports = class Server {
 
     init (port) {
         this.server = http.createServer(this.requestHandler.bind(this)).listen(port, function () {
-            console.log(`Listening on http://localhost:${port}.`);
+            console.log(`Listening on http://localhost:${port}`);
         });
     }
 
