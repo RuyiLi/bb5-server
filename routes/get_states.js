@@ -14,7 +14,7 @@ module.exports = function (req, res, { unit }, database) {
         });
         res.end(JSON.stringify({
             code: 200,
-            units: rows 
+            devices: rows 
         }));
     }).catch(function (err) {
         console.error(err);

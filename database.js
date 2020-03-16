@@ -28,11 +28,11 @@ module.exports = class Database {
         if (forceUpdate) {
             try {
                 await this.query('SCHEMA');
+                console.info('Successfully synced database.');
             } catch (err) {
-                // console.error(err);
-                console.error('Error trying to sync tables');
+                console.error('Error trying to sync tables:');
+                console.error(err);
             }
-            console.info('Successfully synced database.');
         }
     }
 

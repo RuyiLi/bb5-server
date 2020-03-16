@@ -30,6 +30,8 @@ module.exports = class Server {
         const { pathname, query } = url.parse(req.url);
         const route = pathname.slice(1);
 
+        console.log(`[${new Date()}] ${req.method} ${pathname}: ${query ? query.split('&').join(', ') : 'No parameters.'}`);
+
         if (!this.routes.get(req.method).has(route)) {
             res.writeHead(404);
             res.end(JSON.stringify({
