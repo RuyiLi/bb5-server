@@ -1,4 +1,6 @@
 const http = require('http');
+const url = require('url');
+const qs = require('querystring');
 
 module.exports = class Server {
     constructor (routes, database) {
@@ -25,18 +27,18 @@ module.exports = class Server {
     }
 
     async requestHandler (req, res) {
-        const { url, method } = req;
-        const route = url.slice(1);
+        const { pathname, query } = url.parse(req.url);
+        const route = pathname.slice(1);
 
-        if (!this.routes.get(method).has(route)) {
+        if (!this.routes.get(req.method).has(route)) {
             res.writeHead(404);
             res.end(JSON.stringify({
                 code: 404,
                 message: 'Invalid route or illegal request.',
             }));
         } else {
-            const body = await this.readRequestBody(req);
-            this.routes.get(method).get(route)(req, res, body ? JSON.parse(body) : {}, this.database);
+            const queryParams = qs.parse(query);
+            this.routes.get(req.method).get(route)(req, res, queryParams, this.database);
         }
     } 
 }
