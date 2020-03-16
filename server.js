@@ -36,7 +36,7 @@ module.exports = class Server {
             }));
         } else {
             const body = await this.readRequestBody(req);
-            this.routes.get(method).get(route)(req, res, JSON.parse(body), this.database);
+            this.routes.get(method).get(route)(req, res, body ? JSON.parse(body) : {}, this.database);
         }
     } 
 }
