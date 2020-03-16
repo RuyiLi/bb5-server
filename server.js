@@ -8,7 +8,7 @@ module.exports = class Server {
     }
 
     init (port) {
-        this.server = http.createServer(requestHandler).listen(port, function () {
+        this.server = http.createServer(this.requestHandler.bind(this)).listen(port, function () {
             console.log(`Listening on http://localhost:${port}.`);
         });
     }
@@ -27,11 +27,13 @@ module.exports = class Server {
     async requestHandler (req, res) {
         const { url, method } = req;
         const route = url.slice(1);
+        
+        console.log(this.routes.get(method), route);
 
-        if (!this.routes.get('method').has(route)) {
+        if (!this.routes.get(method).has(route)) {
             res.writeHead(404).end('asdf');
         } else {
-            const body = await readRequestBody(req);
+            const body = await this.readRequestBody(req);
             this.routes.get(method).get(route)(req, res, body, this.database);
         }
     } 

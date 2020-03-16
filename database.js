@@ -5,9 +5,9 @@ module.exports = class Database {
     constructor (uri) {
         this.uri = uri;
         this.pool = new Pool({
-            connectionString: process.env.DB_URI,
+            connectionString: process.env.DATABASE_URL,
         });
-        this.queryDirectoryPath = './sql';
+        this.queryDirectoryPath = './sql/';
         this.queries = {};
     }
 

@@ -9,7 +9,7 @@ module.exports = class WebsocketServer {
 
     init (port) {
         this.wss = new ws.Server({ port });
-        this.wss.on('connection', this.onConnect);
+        this.wss.on('connection', this.onConnect.bind(this));
     }
 
     onConnect (ws_) {
