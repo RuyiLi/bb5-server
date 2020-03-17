@@ -40,7 +40,7 @@ module.exports = class Server {
             }));
         } else {
             const queryParams = qs.parse(query);
-            this.routes.get(req.method).get(route)(req, res, queryParams, this.database);
+            this.routes.get(req.method).get(route)(req, res, queryParams, this.database, this.wss);
         }
     } 
 }

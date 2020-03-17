@@ -7,8 +7,8 @@ module.exports = class WebsocketServer {
         this.database = database;
     }
 
-    init (port) {
-        this.wss = new ws.Server({ port });
+    init ({ server }) {
+        this.wss = new ws.Server({ server });
         this.wss.on('connection', this.onConnect.bind(this));
     }
 
