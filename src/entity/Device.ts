@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Unit } from './Unit';
 import { Sensor } from './Sensor';
+import { State } from './State';
 
 export enum DeviceType {
     LIGHTING    = 0,
@@ -16,7 +17,7 @@ export class Device {
      * Unique identifier for each device.
      */
     @PrimaryGeneratedColumn('uuid')
-    device_id!: string;
+    deviceId!: string;
 
 
     /**
@@ -28,7 +29,7 @@ export class Device {
         type: 'enum',
         enum: DeviceType
     })
-    device_type!: DeviceType;
+    deviceType!: DeviceType;
 
 
     /**
@@ -37,16 +38,16 @@ export class Device {
      * will thus not be used to identify anything. Similar to 
      * a user's username.
      */
-    @Column()
-    device_name!: string;
+    @Column({ length: 40 })
+    deviceName!: string;
 
 
     @UpdateDateColumn()
-    last_updated!: Date;
+    lastUpdated!: Date;
 
 
     @CreateDateColumn()
-    created_at!: Date;
+    createdAt!: Date;
 
 
     /**
@@ -61,5 +62,14 @@ export class Device {
      */
     @ManyToOne(type => Sensor, sensor => sensor.devices)
     sensor!: Sensor;
+
+
+    /**
+     * ONE device HAS ONE state. Bidirectional.
+     */
+    @OneToOne(type => State, state => state.device, {
+        cascade: true,
+    })
+    state!: State;
 
 }

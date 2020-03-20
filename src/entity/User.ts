@@ -7,15 +7,15 @@ export class User {
      * Unique identifier for each user.
      */
     @PrimaryGeneratedColumn('uuid')
-    user_id!: string;
+    userId!: string;
 
-    
+
     /**
      * App will call the user by this name. 
      * Doesn't have to be unique, won't be used to find
      * anything related to the user (we have the uuid for that).
      */
-    @Column()
+    @Column({ length: 40 })
     username!: string;
     
 

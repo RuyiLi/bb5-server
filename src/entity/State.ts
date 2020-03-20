@@ -9,13 +9,10 @@ export enum StateType {
 export class State {
 
     /**
-     * ONE device HAS ONE state. 
-     * Unidirectional relationship until further notice.
+     * ONE state HAS ONE device. Bidirectional.
      */
-    @OneToOne(type => Device)
-    @JoinColumn({
-        name: 'device_id'
-    })
+    @OneToOne(type => Device, device => device.state)
+    @JoinColumn()
     device!: Device;
 
 
@@ -29,7 +26,7 @@ export class State {
     })
     type!: StateType;
 
-    
+
     /**
      * If the type is analog, the value is a range from 0 to 100 
      * with 0 representing an "off" state. Used for devices with a 

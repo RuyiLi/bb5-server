@@ -9,7 +9,7 @@ export class Unit {
      * Unique identifier for each unit.
      */
     @PrimaryGeneratedColumn('uuid')
-    unit_id!: string;
+    unitId!: string;
 
 
     /**
@@ -31,5 +31,5 @@ export class Unit {
      */
     @OneToMany(type => Sensor, sensor => sensor.unit)
     sensors!: Sensor[];
-    
+
 }

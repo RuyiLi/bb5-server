@@ -8,8 +8,16 @@ export class Sensor {
      * Unique identified for each sensor.
      */
     @PrimaryGeneratedColumn('uuid')
-    sensor_id!: string;
+    sensorId!: string;
 
+    
+    /**
+     * Name of the sensor. Only for human-friendly use in the
+     * app; will not be used to uniquely identify sensors. 
+     */
+    @Column({ length: 40 })
+    sensorName!: string;
+    
 
     /**
      * Whether or not to listen for changes from this sensor.
