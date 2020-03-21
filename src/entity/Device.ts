@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { Unit } from './Unit';
 import { Sensor } from './Sensor';
-import { State } from './State';
 
 export enum DeviceType {
     LIGHTING    = 0,
@@ -10,6 +9,13 @@ export enum DeviceType {
     SECURITY    = 3,
 }
 
+
+export enum StateType {
+    ANALOG  = 0,
+    DIGITAL = 1,
+}
+
+
 @Entity()
 export class Device {
     
@@ -17,7 +23,7 @@ export class Device {
      * Unique identifier for each device.
      */
     @PrimaryGeneratedColumn('uuid')
-    deviceId!: string;
+    id!: string;
 
 
     /**
@@ -51,6 +57,30 @@ export class Device {
 
 
     /**
+     * The measurement system for the state of device.
+     * 0 for analog and 1 for digital.
+     */
+    @Column({
+        type: 'enum',
+        enum: StateType,
+    })
+    stateType!: StateType;
+
+
+    /**
+     * If the type is analog, the value is a range from -100 to 100 
+     * with 0 representing an "off" state.
+     * If the type is digital, the value is either 0 or 1. 0 represents
+     * an "off" state, and 1 an "on" state.
+     */
+    @Column({
+        type: 'smallint',
+        default: 0,
+    })
+    stateValue!: number;
+
+
+    /**
      * MANY devices HAVE ONE unit. Bidirectional.
      */
     @ManyToOne(type => Unit, unit => unit.devices)
@@ -60,16 +90,9 @@ export class Device {
     /**
      * MANY devices HAVE ONE sensor. Bidirectional.
      */
-    @ManyToOne(type => Sensor, sensor => sensor.devices)
-    sensor!: Sensor;
-
-
-    /**
-     * ONE device HAS ONE state. Bidirectional.
-     */
-    @OneToOne(type => State, state => state.device, {
-        cascade: true,
+    @ManyToOne(type => Sensor, sensor => sensor.devices, {
+        nullable: true,
     })
-    state!: State;
+    sensor?: Sensor;
 
 }

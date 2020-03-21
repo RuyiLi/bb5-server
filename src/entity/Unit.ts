@@ -1,22 +1,23 @@
-import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './User';
+import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { Users } from './User';
 import { Device } from './Device';
 import { Sensor } from './Sensor';
 
+@Entity()
 export class Unit {
 
     /**
      * Unique identifier for each unit.
      */
     @PrimaryGeneratedColumn('uuid')
-    unitId!: string;
+    id!: string;
 
 
     /**
      * MANY units HAVE ONE user. Bidirectional.
      */
-    @ManyToOne(type => User, user => user.units)
-    user!: User;
+    @ManyToOne(type => Users, user => user.units)
+    user!: Users;
     
 
     /**

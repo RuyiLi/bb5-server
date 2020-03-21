@@ -1,14 +1,15 @@
-import { PrimaryGeneratedColumn, ManyToOne, OneToMany, Column } from 'typeorm';
+import { PrimaryGeneratedColumn, ManyToOne, OneToMany, Column, Entity } from 'typeorm';
 import { Unit } from './Unit';
 import { Device } from './Device';
 
+@Entity()
 export class Sensor {
 
     /**
      * Unique identified for each sensor.
      */
     @PrimaryGeneratedColumn('uuid')
-    sensorId!: string;
+    id!: string;
 
     
     /**

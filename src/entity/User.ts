@@ -1,13 +1,16 @@
-import { PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, OneToMany, Entity } from 'typeorm';
 import { Unit } from './Unit';
 
-export class User {
+// Plural to avoid conflict with built-in user table in pg
+
+@Entity()
+export class Users {
 
     /**
      * Unique identifier for each user.
      */
     @PrimaryGeneratedColumn('uuid')
-    userId!: string;
+    id!: string;
 
 
     /**
