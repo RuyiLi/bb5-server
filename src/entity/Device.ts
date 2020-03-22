@@ -68,8 +68,8 @@ export class Device {
 
 
     /**
-     * If the type is analog, the value is a range from -100 to 100 
-     * with 0 representing an "off" state.
+     * If the type is analog, the value is a range from 0 to 100 
+     * with 0 representing an "off" state, excepting motors.
      * If the type is digital, the value is either 0 or 1. 0 represents
      * an "off" state, and 1 an "on" state.
      */

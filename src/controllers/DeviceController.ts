@@ -31,12 +31,24 @@ class PatchDeviceQuery {
 
 }
 
+export async function getConnectedUser (deviceId: string): Promise<string> {
+    const device: Device | undefined = await getRepository(Device)
+        .createQueryBuilder('device')
+        .leftJoinAndSelect('device.unit.user', 'user')
+        .where('device.id::text = :deviceId', { deviceId })
+        .getOne();
+
+    if (typeof device === 'undefined') throw new Error('Could not find a device with the specified ID.');
+
+    return device.unit.user.id;
+}
+
 @JsonController('/devices')
 export class DeviceController {
 
     /**
      * Returns the state of a specified device.
-     * @param {string (uuid)} deviceId The ID of the device.
+     * @param {string (uuid)} device The ID of the device.
      */
     @Get('/state')
     async getDeviceState (
@@ -95,9 +107,9 @@ export class DeviceController {
         if (typeof deviceType !== 'undefined') device.deviceType = deviceType;
         if (typeof stateType !== 'undefined') device.stateType = stateType;
         if (typeof stateValue !== 'undefined') {
-            if (stateValue < -100 || stateValue > 100) return {
+            if (stateValue < 0 || stateValue > 100) return {
                 code: 400,
-                message: 'stateValue must be between -100 and 100, inclusive.'
+                message: 'stateValue must be between 0 and 100, inclusive.'
             }
             device.stateValue = stateValue;
         }
@@ -113,8 +125,8 @@ export class DeviceController {
 
     /**
      * Creates and links a device with the specified unit.
-     * @param {string} deviceName The name of the new device. 
      * @param {string (uuid)} unitId The ID of the unit that this device belongs to. 
+     * @param {string} deviceName The name of the new device. 
      * @param {DeviceType} deviceType The type of the new device. 
      * @param {StateType} stateType The type of the state of the new device.
      */

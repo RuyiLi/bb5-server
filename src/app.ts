@@ -1,11 +1,12 @@
 import 'reflect-metadata';
 import { createExpressServer } from 'routing-controllers';
-import { Server } from 'ws';
 import { createConnection, Connection } from 'typeorm';
 
 import { DeviceController } from './controllers/DeviceController';
 import { UnitController } from './controllers/UnitController';
 import { UserController } from './controllers/UserController';
+
+import { initWSS } from './websocket';
 
 require('dotenv').config();
 
@@ -17,7 +18,7 @@ require('dotenv').config();
 
 
     // Websocket Server
-    const ws = new Server({ server: httpServer });
+    initWSS(httpServer);
 
 
     // Database

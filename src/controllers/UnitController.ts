@@ -39,6 +39,7 @@ export class UnitController {
     async getDevices (
         @QueryParam('unit', { required: true }) unitId: string
     ) {
+        // Could also query from Device side
         const unit: Unit | undefined = await getRepository(Unit)
             .createQueryBuilder('unit')
             .leftJoinAndSelect('unit.devices', 'device')
