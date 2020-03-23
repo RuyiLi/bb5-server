@@ -1,6 +1,6 @@
-import { Server, ServerOptions } from 'ws';
-import WebSocket = require('ws');
+import * as ws from 'express-ws';
 import { getConnectedUser } from './controllers/DeviceController';
+
 
 export enum WebSocketMessageType {
     IDENTIFY                = 0,
@@ -11,26 +11,31 @@ let wss: WebSocketServer | null = null;
 
 export const getWSS = () => wss;
 export const initWSS = (server: any) => {
-    wss = new WebSocketServer({ server, path: '/ws' });
+    wss = new WebSocketServer(server);
 }
 
-class WebSocketServer extends Server {
+class WebSocketServer {
 
-    public connections: Map<string, WebSocket>;
+    public connections: Map<string, any>;
 
-    constructor (options: ServerOptions) {
-        super(options);
+    constructor (public server: any) {
+        ws(server);
         this.connections = new Map();
     }
 
     init () {
-        this.on('connection', this.handleConnection); 
+        this.server.ws('/listen', this.handleConnection); 
         console.info('WSS started.');
     }
 
-    handleConnection = (ws: WebSocket) => {
-        this.on('message', (message) => {
-            const { type, content } = JSON.parse(message);
+    handleConnection = (ws: any) => {
+        ws.on('message', (message: string) => {
+            try {
+                var { type, content } = JSON.parse(message);
+            } catch {
+                ws.send('Please stringify your object before sending it.')
+            }
+            
             switch (type) {
 
                 case WebSocketMessageType.IDENTIFY:

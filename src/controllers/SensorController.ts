@@ -100,6 +100,7 @@ export class SensorController {
         const sensor = new Sensor();
         sensor.devices = [];
         sensor.disabled = typeof disabled === 'undefined' || !!disabled;
+        sensor.activated = true;
         sensor.sensorName = name;
         sensor.unit = unit;
 
@@ -160,10 +161,9 @@ export class SensorController {
         }
 
         device.sensor = sensor;
-        sensor.devices.push(device);
 
-        await deviceRepository.save(device);
         await sensorRepository.save(sensor);
+        await deviceRepository.save(device);
 
         return {
             code: 200,

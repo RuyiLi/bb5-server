@@ -52,7 +52,7 @@ export class UnitController {
 
         return {
             code: 200,
-            devices: unit.sensors || [],
+            sensors: unit.sensors || [],
         }
     }
 
