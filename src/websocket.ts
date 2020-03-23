@@ -10,7 +10,9 @@ export enum WebSocketMessageType {
 let wss: WebSocketServer | null = null;
 
 export const getWSS = () => wss;
-export const initWSS = (server: any) => wss = new WebSocketServer({ server });
+export const initWSS = (server: any) => {
+    wss = new WebSocketServer({ server, path: '/ws' });
+}
 
 class WebSocketServer extends Server {
 
@@ -23,6 +25,7 @@ class WebSocketServer extends Server {
 
     init () {
         this.on('connection', this.handleConnection); 
+        console.info('WSS started.');
     }
 
     handleConnection = (ws: WebSocket) => {

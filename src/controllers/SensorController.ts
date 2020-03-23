@@ -1,4 +1,4 @@
-import { JsonController, Post, QueryParam, QueryParams } from 'routing-controllers';
+import { JsonController, Post, QueryParam, QueryParams, Patch, Get } from 'routing-controllers';
 import { getRepository } from 'typeorm';
 import { Sensor } from '../entity/Sensor';
 import { Device, StateType } from '../entity/Device';
@@ -52,8 +52,31 @@ export async function updateSensorState (sensorId: string, state?: boolean): Pro
 }
 
 
-@JsonController()
+@JsonController('/sensors')
 export class SensorController {
+
+    @Patch('/update')
+    async updateSensor (
+        @QueryParam('sensor', { required: true }) sensorId: string,
+        @QueryParam('activated', { required: false }) activated?: boolean,
+    ) {
+
+        try {
+            if (typeof activated === 'undefined')
+                await updateSensorState(sensorId);
+            else
+                await updateSensorState(sensorId, activated!);
+        } catch (err) {
+            return {
+                code: 400,
+                err
+            }
+        }
+
+        return {
+            code: 200,
+        }
+    }
 
     @Post('/create')
     async createSensor (
@@ -97,8 +120,8 @@ export class SensorController {
      */
     @Post('/add_device')
     async addTargetDevice(
-        @QueryParam('sensor') sensorId: string,
-        @QueryParam('device') deviceId: string,
+        @QueryParam('sensor', { required: true }) sensorId: string,
+        @QueryParam('device', { required: true }) deviceId: string,
     ) {
         const sensorRepository = getRepository(Sensor);
         const sensor: Sensor | undefined  = await sensorRepository
@@ -145,6 +168,29 @@ export class SensorController {
         return {
             code: 200,
             sensor
+        }
+    }
+    
+
+    @Get('/connected_devices')
+    async getConnectedDevices (
+        @QueryParam('sensor', { required: true }) sensorId: string,
+    ) {
+        const sensorRepository = getRepository(Sensor);
+        const sensor: Sensor | undefined = await sensorRepository
+            .createQueryBuilder('sensor')
+            .leftJoinAndSelect('sensor.devices', 'devices')
+            .where('sensor.id::text = :sensorId', { sensorId })
+            .getOne();
+
+        if (typeof sensor === 'undefined') return {
+            code: 404,
+            message: 'Could not find a sensor with the specified ID.',
+        }
+
+        return {
+            code: 200,
+            message: sensor.devices,
         }
     }
 

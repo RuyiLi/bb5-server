@@ -6,9 +6,11 @@ import { DeviceController } from './controllers/DeviceController';
 import { UnitController } from './controllers/UnitController';
 import { UserController } from './controllers/UserController';
 
-import { initWSS } from './websocket';
+import { initWSS, getWSS } from './websocket';
 
 require('dotenv').config();
+
+export const PORT = process.env.PORT || 8080;
 
 (async function () {
     // HTTP Server
@@ -32,6 +34,11 @@ require('dotenv').config();
         // .js since when compiled with tsc the entity declarations
         // will be in js, not ts.
     });
+    console.info('Successfully connected to database.');
 
-    httpServer.listen(process.env.PORT || 8080);
+
+    httpServer.listen(PORT);
+    console.info(`Listening on port ${PORT}.`);
+
+    getWSS()!.init();
 })();

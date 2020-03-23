@@ -35,6 +35,27 @@ export class UnitController {
         }
     }
 
+    @Get('/connected_sensors')
+    async getSensors (
+        @QueryParam('unit', { required: true }) unitId: string
+    ) {
+        const unit: Unit | undefined = await getRepository(Unit)
+            .createQueryBuilder('unit')
+            .leftJoinAndSelect('unit.sensors', 'sensors')
+            .where('unit.id::text = :unitId', { unitId })
+            .getOne();
+
+        if (typeof unit === 'undefined') return {
+            code: 404,
+            message: 'Could not find a unit with the specified ID.',
+        }
+
+        return {
+            code: 200,
+            devices: unit.sensors || [],
+        }
+    }
+
     @Get('/connected_devices')
     async getDevices (
         @QueryParam('unit', { required: true }) unitId: string
@@ -42,7 +63,7 @@ export class UnitController {
         // Could also query from Device side
         const unit: Unit | undefined = await getRepository(Unit)
             .createQueryBuilder('unit')
-            .leftJoinAndSelect('unit.devices', 'device')
+            .leftJoinAndSelect('unit.devices', 'devices')
             .where('unit.id::text = :unitId', { unitId })
             .getOne();
 

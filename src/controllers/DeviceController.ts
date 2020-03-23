@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm';
 import { Unit } from '../entity/Unit';
 import { DeviceType, Device, StateType } from '../entity/Device';
 import { IsEnum } from 'class-validator';
+import { getWSS, WebSocketMessageType } from '../websocket';
 
 class PostDeviceQuery {
     
@@ -115,6 +116,12 @@ export class DeviceController {
         }
 
         await deviceRepository.save(device);
+
+        await getWSS()!.broadcastMessage(WebSocketMessageType.DEVICE_STATE_UPDATE, {
+            deviceId,
+            stateType,
+            stateValue
+        })
 
         return { 
             code: 200,
