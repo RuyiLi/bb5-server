@@ -7,6 +7,7 @@ import { UnitController } from './controllers/UnitController';
 import { UserController } from './controllers/UserController';
 
 import { initWSS, getWSS } from './websocket';
+import { SensorController } from './controllers/SensorController';
 
 require('dotenv').config();
 
@@ -15,7 +16,7 @@ export const PORT = process.env.PORT || 8080;
 (async function () {
     // HTTP Server
     const httpServer = createExpressServer({
-        controllers: [ DeviceController, UnitController, UserController ],
+        controllers: [ DeviceController, UnitController, UserController, SensorController ],
     });
 
 
